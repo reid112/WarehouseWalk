@@ -34,15 +34,43 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/voting_container"
             tools:context="ca.rjreid.warehousewalk.ui.map.MapActivity"/>
+
+        <LinearLayout
+            android:id="@+id/modal"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/modal_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:gravity="center_horizontal"
+                tools:text="Title"/>
+
+            <ImageView
+                android:id="@+id/modal_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/voting_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center">
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:background="#FFFFFF">
 
             <Button
                 android:id="@+id/vote_up_button"
@@ -57,20 +85,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Down Vote"/>
-
-            <ImageView
-                android:id="@+id/checkmark"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_check_black_24dp"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/thanks_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thanks for voting!"
-                android:visibility="gone"/>
 
         </LinearLayout>
 

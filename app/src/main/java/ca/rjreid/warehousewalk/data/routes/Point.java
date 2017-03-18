@@ -13,6 +13,9 @@ public class Point implements Parcelable {
     @Expose @SerializedName("number") private int number;
     @Expose @SerializedName("lat") private double lat;
     @Expose @SerializedName("lng") private double lng;
+    @Expose @SerializedName("tour_id") private int tourId;
+    @Expose @SerializedName("icon") private String icon;
+    @Expose @SerializedName("image") private String image;
 
     public int getId() {
         return id;
@@ -34,6 +37,20 @@ public class Point implements Parcelable {
         return lng;
     }
 
+    public int getTourId() {
+        return tourId;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Point() {
+    }
 
     @Override public int describeContents() {
         return 0;
@@ -45,9 +62,9 @@ public class Point implements Parcelable {
         dest.writeInt(this.number);
         dest.writeDouble(this.lat);
         dest.writeDouble(this.lng);
-    }
-
-    public Point() {
+        dest.writeInt(this.tourId);
+        dest.writeString(this.icon);
+        dest.writeString(this.image);
     }
 
     protected Point(Parcel in) {
@@ -56,6 +73,9 @@ public class Point implements Parcelable {
         this.number = in.readInt();
         this.lat = in.readDouble();
         this.lng = in.readDouble();
+        this.tourId = in.readInt();
+        this.icon = in.readString();
+        this.image = in.readString();
     }
 
     public static final Creator<Point> CREATOR = new Creator<Point>() {

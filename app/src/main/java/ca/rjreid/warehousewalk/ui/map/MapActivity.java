@@ -1,28 +1,32 @@
 package ca.rjreid.warehousewalk.ui.map;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentActivity;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -49,7 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback {
+public class MapActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     public static final String EXTRA_ROUTE_ID = "EXTRA_ROUTE_ID";
     public static final String EXTRA_ROUTE_NAME = "EXTRA_ROUTE_NAME";
@@ -59,10 +63,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private RouteDetails routeDetails;
     private boolean hasBeenInitialized = false;
 
-    @BindView(R.id.checkmark) ImageView checkmark;
-    @BindView(R.id.thanks_text_view) TextView thanksTextView;
-    @BindView(R.id.vote_up_button) Button voteUpButton;
-    @BindView(R.id.vote_down_button) Button voteDownButton;
+    @BindView(R.id.voting_container) LinearLayout votingCont;
+    @BindView(R.id.modal) LinearLayout modal;
+    @BindView(R.id.modal_title) TextView modalTitle;
+    @BindView(R.id.modal_image) ImageView modalImage;
 
     public static Intent createIntent(Context context, int routeId, String name) {
         Intent intent = new Intent(context, MapActivity.class);
@@ -132,6 +136,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         LatLng firstPoint = new LatLng(routeDetails.getPoints().get(0).getLat(), routeDetails.getPoints().get(0).getLng());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(firstPoint, 15));
+        map.setOnMarkerClickListener(this);
     }
 
     @OnClick(R.id.vote_up_button)
@@ -161,11 +166,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     private void showCheck() {
-        checkmark.setVisibility(View.VISIBLE);
-        thanksTextView.setVisibility(View.VISIBLE);
-
-        voteUpButton.setVisibility(View.GONE);
-        voteDownButton.setVisibility(View.GONE);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
+        votingCont.animate().translationY(-1 * px).setDuration(300);
     }
 
     public void drawPath(String  result) {
@@ -233,6 +236,38 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         return poly;
     }
 
+    private void showInfo(Point point) {
+        if (modal.getVisibility() == View.VISIBLE) {
+            Animation bottomDown = AnimationUtils.loadAnimation(this, R.anim.bottom_down);
+            modal.startAnimation(bottomDown);
+            modal.setVisibility(View.GONE);
+        } else {
+            modalTitle.setText(point.getName());
+
+            Glide.with(getApplicationContext())
+                    .load(point.getImage())
+                    .centerCrop()
+                    .error(R.drawable.ic_android)
+                    .crossFade()
+                    .into(modalImage);
+
+            Animation bottomUp = AnimationUtils.loadAnimation(this, R.anim.bottom_up);
+            modal.startAnimation(bottomUp);
+            modal.setVisibility(View.VISIBLE);
+        }
+    }
+
+    Drawable getProgressBarIndeterminate(Context context) {
+        final int[] attrs = {android.R.attr.indeterminateDrawable};
+        final int attrs_indeterminateDrawable_index = 0;
+        TypedArray a = context.obtainStyledAttributes(android.R.style.Widget_ProgressBar, attrs);
+        try {
+            return a.getDrawable(attrs_indeterminateDrawable_index);
+        } finally {
+            a.recycle();
+        }
+    }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -246,6 +281,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         initPoints();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        for (Point point : routeDetails.getPoints()) {
+            if (point.getName().equals(marker.getTitle())) {
+                showInfo(point);
+                break;
+            }
+        }
+        return true;
     }
 
     @Override
