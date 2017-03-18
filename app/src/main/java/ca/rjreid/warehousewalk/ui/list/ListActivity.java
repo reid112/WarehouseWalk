@@ -19,6 +19,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -99,7 +106,7 @@ public class ListActivity extends BaseActivity {
 
                 bindRoutesList(sortRoutes(routes), new ListAdapter.Listener() {
                     @Override public void routeClicked(Route route) {
-                        startActivity(MapActivity.createIntent(ListActivity.this, route.getId()));
+                        startActivity(MapActivity.createIntent(ListActivity.this, route.getId(), route.getName()));
                     }
                 });
             }
@@ -167,6 +174,8 @@ public class ListActivity extends BaseActivity {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
     }
+
+
 
     @Override
     protected int getLayoutId() {

@@ -3,6 +3,7 @@ package ca.rjreid.warehousewalk.data;
 
 import java.util.List;
 
+import ca.rjreid.warehousewalk.data.directions.DirectionsQuery;
 import ca.rjreid.warehousewalk.data.routes.Route;
 import ca.rjreid.warehousewalk.data.routes.RouteDetails;
 import ca.rjreid.warehousewalk.data.routes.RoutesQuery;
@@ -15,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DataManager {
     //region Constants
     private static final String ENDPOINT = "https://arcane-hollows-68750.herokuapp.com/api/";
+    private static final String DIRECTIONS_ENDPOINT = "http://maps.googleapis.com/maps/api/";
     private final Retrofit retrofit = initRetrofit();
     private static volatile DataManager instance;
     private static final Object lock = new Object();
@@ -63,6 +65,20 @@ public class DataManager {
     public void startVoteDownQuery(int id, Callback<ResponseBody> callback) {
         RoutesQuery routesQuery = retrofit.create(RoutesQuery.class);
         Call<ResponseBody> call = routesQuery.voteDown(id);
+        call.enqueue(callback);
+    }
+
+    public void startDirectionsQuery(double srclat, double srclng, double destlat, double destlng, Callback<ResponseBody> callback) {
+        String src = srclat + "," + srclng;
+        String dest = destlat + "," + destlng;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(DIRECTIONS_ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        DirectionsQuery directionsQuery = retrofit.create(DirectionsQuery.class);
+        Call<ResponseBody> call = directionsQuery.getDirections(src, dest, false, "metric", "walking");
         call.enqueue(callback);
     }
     //endregion
