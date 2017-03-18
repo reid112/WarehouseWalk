@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/route_row_container"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="16dp"
+              android:paddingBottom="16dp"
+              android:paddingStart="16dp"
+              android:paddingEnd="16dp">
+
+    <ImageView
+        android:id="@+id/icon_image_view"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="10dp"
+        tools:src="@drawable/ic_thumb_up"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/route_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/icon_image_view"
+        tools:text="Name will go here"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true">
+
+        <LinearLayout
+            android:id="@+id/thumbs_up_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="10dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_thumb_up"/>
+
+            <TextView
+                android:id="@+id/thumbs_up_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                tools:text="17"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/thumbs_down_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_thumb_down"/>
+
+            <TextView
+                android:id="@+id/thumbs_down_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                tools:text="12"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
