@@ -11,8 +11,8 @@ public class Route implements Parcelable {
     @Expose @SerializedName("id") private int id;
     @Expose @SerializedName("name") private String name;
     @Expose @SerializedName("icon") private String icon;
-    @Expose @SerializedName("up_votes") private String upVotes;
-    @Expose @SerializedName("down_votes") private String downVotes;
+    @Expose @SerializedName("up_votes") private int upVotes;
+    @Expose @SerializedName("down_votes") private int downVotes;
     @Expose @SerializedName("start_point") private Point point;
 
     public int getId() {
@@ -27,11 +27,11 @@ public class Route implements Parcelable {
         return icon;
     }
 
-    public String getUpVotes() {
+    public int getUpVotes() {
         return upVotes;
     }
 
-    public String getDownVotes() {
+    public int getDownVotes() {
         return downVotes;
     }
 
@@ -47,17 +47,20 @@ public class Route implements Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.name);
         dest.writeString(this.icon);
-        dest.writeString(this.upVotes);
-        dest.writeString(this.downVotes);
+        dest.writeInt(this.upVotes);
+        dest.writeInt(this.downVotes);
         dest.writeParcelable(this.point, flags);
+    }
+
+    public Route() {
     }
 
     protected Route(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
         this.icon = in.readString();
-        this.upVotes = in.readString();
-        this.downVotes = in.readString();
+        this.upVotes = in.readInt();
+        this.downVotes = in.readInt();
         this.point = in.readParcelable(Point.class.getClassLoader());
     }
 

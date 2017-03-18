@@ -111,7 +111,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     @OnClick(R.id.vote_down_button)
     public void voteDown() {
-        DataManager.getInstance().startVoteUpQuery(routeDetails.getId(), new Callback<ResponseBody>() {
+        DataManager.getInstance().startVoteDownQuery(routeDetails.getId(), new Callback<ResponseBody>() {
             @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 showCheck();
             }

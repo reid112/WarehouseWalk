@@ -49,8 +49,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.RouteRowHolder
             loadIcon(context, route.getIcon());
 
             nameTextView.setText(route.getName());
-            thumbsUpTextView.setText(route.getUpVotes());
-            thumbsDownTextView.setText(route.getDownVotes());
+            thumbsUpTextView.setText(Integer.toString(route.getUpVotes()));
+            thumbsDownTextView.setText(Integer.toString(route.getDownVotes()));
         }
 
         private void loadIcon(Context context, String imageUrl) {

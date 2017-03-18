@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -118,6 +120,16 @@ public class ListActivity extends BaseActivity {
     }
 
     private List<Route> sortRoutes(List<Route> routes) {
+        Collections.sort(routes, new Comparator<Route>(){
+            public int compare(Route r1, Route r2){
+                if(r1.getUpVotes() == r2.getUpVotes()) {
+                    return 0;
+                }
+
+                return r1.getUpVotes() > r2.getUpVotes() ? -1 : 1;
+            }
+        });
+
         return routes;
     }
 
