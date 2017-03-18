@@ -104,7 +104,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     }
 
     private void initPoints() {
-        if (hasBeenInitialized || map == null || routeDetails == null) {
+        if (hasBeenInitialized || map == null || routeDetails == null || routeDetails.getPoints() == null || routeDetails.getPoints().size() <= 0) {
             return;
         }
 
